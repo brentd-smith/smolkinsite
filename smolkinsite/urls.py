@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+import songs.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', songs.views.index),
+    url(r'^service/(?P<service_name>[\-\'a-zA-Z]+)', songs.views.song_list)
+    
+    # services
+    # url(r'(?P<service_type>srv)/(?P<service_name>[\-\'a-zA-Z]+)', songs.views, name='songs'),
+    # url(r'(?P<song_id>[0-9]+)/(?P<service_name>[\-\'a-zA-Z]+)/(?P<song_name>[a-zA-Z]+)', views.song_detail, name='song_detail'),   
 ]

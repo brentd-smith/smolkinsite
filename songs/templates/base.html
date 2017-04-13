@@ -1,0 +1,68 @@
+{% load staticfiles  %}
+{% load music_extras %}
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<!-- Website Title & Description for Search Engine purposes -->
+		 <title>{% block title %}{% endblock %}</title>
+		<meta name="description" content="">
+		
+		<!-- Mobile viewport optimized -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+		
+		<!--<link href= "{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">-->
+		<!--<link href="{% static 'includes/css/bootstrap-glyphicons.css' %}" rel="stylesheet">-->
+		<link href="https://s3.amazonaws.com/ian-smolkin-synagogue-audio/static/includes/css/bootstrap-glyphicons.css" rel="stylesheet">
+		
+		<!-- Custom CSS -->
+		<!--<link href="{% static 'includes/css/styles.css' %}" rel="stylesheet">-->
+		<link href="https://s3.amazonaws.com/ian-smolkin-synagogue-audio/static/includes/css/styles.css" rel="stylesheet">
+		
+		<!-- Include Modernizr in the head, before any other Javascript -->
+		<!--<script src="{% static 'includes/js/modernizr-2.6.2.min.js' %}"></script>-->
+
+</head>
+<body>
+    
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="/music">A Jewish Music Tradition</a>
+		</div>
+	</div>
+			
+    <main>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+    
+    <footer class="footer">
+      <div class="container">
+      	<div class="row text-muted">
+			<div class="col-sm-4">
+			<h6>Copyright &copy; 2016 Rabbi Moshe Smolkin</h6>
+			</div>
+			
+			<div class="col-sm-4">
+				<h6>About Us</h6>
+			</div>
+
+	        <div class="col-sm-2">
+				<h6>Coded with <span class="glyphicon glyphicon-heart"></span><br/> by Brent Smith</h6>
+			</div>
+      </div>
+    </footer>
+    
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
