@@ -49,6 +49,9 @@ class ServiceName(models.Model):
     
     # Sequence Number/Sort Order for display in web site
     seq_number = models.PositiveSmallIntegerField(null=False)
+    
+    def __str__(self):
+        return self.display
 
 
 # Represents a Song or melody sung at one of the services
@@ -77,6 +80,9 @@ class Song(models.Model):
     
     # File name of the specific file plus extension, ex: "Shalom Alechem A.mp3"
     file_name = models.CharField(max_length=128, null=False)
+    
+    def __str__(self):
+        return self.display
 
 
 # 07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah/3rd Triennial Noach 6th Aliyah-0.jpg
@@ -95,6 +101,9 @@ class BookName(models.Model):
     
     # Sequence Number/Sort Order for display in web site
     seq_number = models.PositiveSmallIntegerField(null=False)
+
+    def __str__(self):
+        return self.display
 
 # Represents a Parsha from one of the books of the Torah
 class ParshaName(models.Model):
@@ -137,7 +146,9 @@ class ParshaName(models.Model):
                 LIST.append(s)
                 DUPLICATES.append(s.display())
         return LIST
-
+        
+    def __str__(self):
+        return self.display
 
 # Represents a Reading - Either a Torah Reading or a Haftarah Reading
 class TorahReading(models.Model):
@@ -168,6 +179,9 @@ class TorahReading(models.Model):
 
     def display(self):
         return self.triennial + ' Triennial ' + self.aliyah + ' Aliyah'
+    
+    def __str__(self):
+        return self.display
 
 
 
@@ -202,3 +216,6 @@ class HaftarahReading(models.Model):
 
     def display(self):
         return 'Haftarah for ' + self.parsha.display
+    
+    def __str__(self):
+        return self.display
