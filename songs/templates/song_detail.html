@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/service/{{ service.name }}">{{ service.display }}</a></li>
+  <li class="active">{{ song.display }}</li>
+</ol>
+<div id="moreInfo">
+	
+	<div class="col-sm-6">
+		<div class="list-group">
+	        <h3>{{ song.display }}</h3>
+	        {% for x in audio_files %}
+		    <div class="list-group-item">
+			    <a href="{% URL_PREFIX %}{{x.s3_obj_key}}">
+			        <h4 class="list-group-item-heading">{{  x.file_name }}</h4></a>
+			    <p class="list-group-item-text">
+			        <audio src="{% URL_PREFIX %}{{x.s3_obj_key}}" type="audio/mpeg" controls></audio></p>
+			</div>
+	        {% endfor %}
+		</div>
+	</div>
+	
+	<div class="col-sm-6">
+		<h3>Lyrics</h3>
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab1" data-toggle="tab">Hebrew Lyrics</a></li>
+				<li><a href="#tab2" data-toggle="tab">Transliterated Lyrics</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<div class="panel">
+						<div class="panel-heading"><a href="{% URL_PREFIX %}{{lyric_doc.0.s3_obj_key}}" download>
+							<h3 class="panel-title">Download Hebrew Lyrics as a PDF</h3></a>
+						</div>
+						<img src="{% URL_PREFIX %}{{lyric_files.0.s3_obj_key}}" alt="Lyrics in Hebrew" class="img-responsive">
+					</div>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<div class="panel">
+						<div class="panel-heading"><a href="{% URL_PREFIX %}{{lyric_doc.1.s3_obj_key}}" download>
+							<h3 class="panel-title">Download Transliterated Lyrics as a PDF</h3></a>
+						</div>
+						<img src="{% URL_PREFIX %}{{lyric_files.1.s3_obj_key}}" alt="Lyrics Transliterated" class="img-responsive">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

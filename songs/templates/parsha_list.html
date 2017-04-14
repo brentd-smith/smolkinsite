@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/{{ service_type }}">{{ reading_type}}</a></li>
+  <li class="active">Parshas in {{ book.display }}</li>
+</ol>
+<div class="row" id="index-table">
+    <div class="table-responsive">
+        <table class="table table-striped table bordered table-hover">
+            <tr><th>Parshas in {{ book.display }}</th></tr>
+            {% for ps in parshas  %}
+            <tr><td><a href="/{{ service_type }}/{{book.name}}/{{ps.name}}">{{ ps.display }}</a>
+                {% if service_type == 'torahreading' %}
+                &nbsp;<span class="badge">{{ ps.reading_count }}</span>
+                {% elif not ps.has_haftarah %}
+                &nbsp;<span class="badge">0</span>
+                {% endif %}
+            </a></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
