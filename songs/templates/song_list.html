@@ -9,7 +9,7 @@
         <table class="table table-striped table bordered table-hover">
             <tr><th>Songs for {{ service.display }}</th></tr>
             {% for song in songs  %}
-            <tr><td><a href="/music/{{song.id}}/{{ song.service_name.name }}/{{song.name}}">{{ song.display }}</a></td></tr>
+            <tr><td><a href="/service/{{ song.service_name.name }}/{{song.name}}">{{ song.display }}</a></td></tr>
             {% endfor %}
         </table>
     </div>
