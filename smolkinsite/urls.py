@@ -20,19 +20,18 @@ import songs.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', songs.views.index),
-    url(r'^service/(?P<service_name>[\-\'a-zA-Z]+)/$', songs.views.song_list),
-    url(r'^service/(?P<service_name>[\-\'a-zA-Z]+)/(?P<song_name>[\-\'a-zA-Z]+)/$', songs.views.song_detail),
+    url(r'^ServiceName/(?P<service_name>[\-\'a-zA-Z]+)/$', songs.views.song_list),
+    url(r'^ServiceName/(?P<service_name>[\-\'a-zA-Z]+)/(?P<song_name>[\-\'a-zA-Z]+)/$', songs.views.song_detail),
 
     # torah readings
-    url(r'^(?P<service_type>torahreading)/$', songs.views.book_list),
-    url(r'^(?P<service_type>torahreading)/(?P<book_name>[a-zA-Z]+)/$', songs.views.parsha_list),
-    # url(r'(?P<service_type>trd)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/(?P<triennial_cycle>1st|2nd|3rd)/(?P<aliyah>1st|2nd|3rd|4th|5th|6th|7th|Maftir)$', 
-    #     songs.views.torah_reading, name='torah_reading'),
-    # url(r'(?P<service_type>trd)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)', views.reading_list, name='reading_list'),
-    # url(r'(?P<service_type>trd)/(?P<book_name>[a-zA-Z]+)', views.parsha_list, name='parsha_list'),
+    url(r'^(?P<service_type>TorahReading)/$', songs.views.book_list),
+    url(r'^(?P<service_type>TorahReading)/(?P<book_name>[a-zA-Z]+)/$', songs.views.parsha_list),
+    url(r'(?P<service_type>TorahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/$', songs.views.reading_list),
+    url(r'(?P<service_type>TorahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/(?P<triennial_cycle>1st|2nd|3rd)/(?P<aliyah>1st|2nd|3rd|4th|5th|6th|7th|Maftir)$', songs.views.torah_reading),
 
+    # haftarah readings
+    url(r'(?P<service_type>HaftarahReading)/$', songs.views.book_list),
+    url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/$', songs.views.parsha_list),
+    url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/$', songs.views.haftarah_reading),
     
-    # services
-    # url(r'(?P<service_type>srv)/(?P<service_name>[\-\'a-zA-Z]+)', songs.views, name='songs'),
-    # url(r'(?P<song_id>[0-9]+)/(?P<service_name>[\-\'a-zA-Z]+)/(?P<song_name>[a-zA-Z]+)', views.song_detail, name='song_detail'),   
 ]

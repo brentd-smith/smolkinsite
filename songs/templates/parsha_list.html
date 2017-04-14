@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load music_extras %}
 {% block content %}
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
@@ -11,11 +12,7 @@
             <tr><th>Parshas in {{ book.display }}</th></tr>
             {% for ps in parshas  %}
             <tr><td><a href="/{{ service_type }}/{{book.name}}/{{ps.name}}">{{ ps.display }}</a>
-                {% if service_type == 'torahreading' %}
-                &nbsp;<span class="badge">{{ ps.reading_count }}</span>
-                {% elif not ps.has_haftarah %}
-                &nbsp;<span class="badge">0</span>
-                {% endif %}
+            <!-- &nbsp;<span class="badge">{{ ps.reading_count }}</span> -->
             </a></td></tr>
             {% endfor %}
         </table>

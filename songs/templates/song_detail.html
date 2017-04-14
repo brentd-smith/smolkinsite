@@ -3,7 +3,7 @@
 {% block content %}
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
-  <li><a href="/service/{{ service.name }}">{{ service.display }}</a></li>
+  <li><a href="/{% SERVICE %}/{{ service.name }}">{{ service.display }}</a></li>
   <li class="active">{{ song.display }}</li>
 </ol>
 <div id="moreInfo">

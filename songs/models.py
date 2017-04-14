@@ -125,6 +125,11 @@ class ParshaName(models.Model):
         readings = HaftarahReading.objects.filter(parsha=self.name)
         return len(readings) > 0
         
+    # check to see if there is a torah reading present for this parsha
+    def has_torah(self):
+        readings = TorahReading.objects.filter(parsha=self.name)
+        return len(readings) > 0
+        
     # get a count of the number of torah readings there are within a parsha
     def reading_count(self):
         DUPLICATES = []
@@ -181,7 +186,7 @@ class TorahReading(models.Model):
         return self.triennial + ' Triennial ' + self.aliyah + ' Aliyah'
     
     def __str__(self):
-        return self.display
+        return self.triennial + ' Triennial ' + self.aliyah + ' Aliyah'
 
 
 
@@ -218,4 +223,4 @@ class HaftarahReading(models.Model):
         return 'Haftarah for ' + self.parsha.display
     
     def __str__(self):
-        return self.display
+        return 'Haftarah for ' + self.parsha.display

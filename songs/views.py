@@ -48,19 +48,69 @@ def book_list(request, service_type):
     
 
 def get_reading_type(service_type):
-    if service_type == 'torahreading':
+    if service_type == 'TorahReading':
         return 'Torah Reading'
-    elif service_type == 'haftarahreading':
+    elif service_type == 'HaftarahReading':
         return 'Haftarah Reading'
         
-
 # get a list of all the parshas in a book of the Torah
 def parsha_list(request, service_type, book_name):
     book = BookName.objects.get(pk=book_name)
     parshas = ParshaName.objects.filter(book_name=book_name)
     reading_type = get_reading_type(service_type)
-    # if (service_type == 'haftarahreading'):
-    #     parshas = filter(has_haftarah, parshas)
+    
+    # filter the list so that the only parshas shown are those that actually have at least one reading
+    if (service_type == 'HaftarahReading'):
+        parshas = list(filter(lambda p: p.has_haftarah(), parshas))
+    else:
+        parshas = list(filter(lambda p: p.has_torah(), parshas))
+    
     return render(request, 'parsha_list.html',
         {'parshas': parshas, 'book': book, 'reading_type': reading_type, 'service_type': service_type})
 
+
+# get a list of all the readings available within a parsha
+def reading_list(request, service_type, book_name, parsha_name):
+    book = BookName.objects.get(pk=book_name)
+    parsha = ParshaName.objects.get(pk=parsha_name)
+    return render(request, 'reading_list.html',
+        {'readings': parsha.reading_list, 'parsha': parsha, 'book': book})
+
+# show the details of a torah reading, with all the audio files, lyric files, etc...
+def torah_reading(request, service_type, book_name, parsha_name, triennial_cycle, aliyah):
+    book = BookName.objects.get(pk=book_name)
+    parsha = ParshaName.objects.get(pk=parsha_name)
+    song = triennial_cycle + ' Triennial ' + aliyah + ' Aliyah'
+    
+    details = TorahReading.objects.filter(parsha=parsha_name, triennial=triennial_cycle, aliyah=aliyah)
+
+    lyric_images = list(filter(is_jpg, details))
+    audio_files = list(filter(is_mp3, details))
+    lyric_doc = list(filter(is_pdf, details))
+    
+    reading_type = get_reading_type(service_type)
+    return render(request, 'reading_detail.html',
+        {'lyric_files': lyric_images, 'lyric_pages' : len(lyric_images),
+        'audio_files': audio_files, 
+        'lyric_doc': lyric_doc, 
+        'song': song, 'parsha': parsha, 'book': book, 'reading_type': reading_type, 'service_type': service_type})
+        
+
+def haftarah_reading(request, service_type, book_name, parsha_name):
+    book = BookName.objects.get(pk=book_name)
+    parsha = ParshaName.objects.get(pk=parsha_name)
+    song = parsha.display
+    
+    details = HaftarahReading.objects.filter(parsha=parsha_name)
+    lyric_images = list(filter(is_jpg, details))
+    audio_files = list(filter(is_mp3, details))
+    lyric_doc = list(filter(is_pdf, details))
+    
+    reading_type = get_reading_type(service_type)
+    
+    return render(request, 'reading_detail.html',
+        {
+        'lyric_files': lyric_images, 'lyric_pages' : len(lyric_images),
+        'audio_files': audio_files, 
+        'lyric_doc': lyric_doc, 
+        'song': song, 'parsha': parsha, 'book': book, 'reading_type': reading_type, 'service_type': service_type})

@@ -2,7 +2,7 @@ import argparse
 import fileinput
 import re
 import sys
-from music.models import BookName, ParshaName, HaftarahReading
+from songs.models import BookName, ParshaName, HaftarahReading
 
 # '1st Triennial Ki Tisa 2nd Aliyah'
 PARSERS = { 
@@ -29,25 +29,25 @@ def process_one_line(line, count):
     line = line.rstrip('/')
     folders = line.split('/')
     if len(folders) == 4:
-        print 's3_obj_key=', line
-        print 'folders=', folders
+        print('s3_obj_key=', line)
+        print('folders=', folders)
         
         book_folder = folders[1]
-        print 'BookFolder=', book_folder
+        print('BookFolder=', book_folder)
         
         bs = book_folder.split(' ')
         book_name = bs[2]
-        print 'BookName=', book_name
+        print('BookName=', book_name)
         bk = BookName.objects.get(pk=book_name)
         
         parsha_folder = folders[2]
         parsha_name = valid_parsha_name.match(parsha_folder).group(1)
         parsha_name = parsha_name.replace(" ", "")
-        print 'ParshaName=', parsha_name
+        print('ParshaName=', parsha_name)
         psh = ParshaName.objects.get(pk=parsha_name)
 
         file_name = folders[3]
-        print 'FileName=',file_name
+        print('FileName=',file_name)
         
         # Figure out the extension
         ext=''
@@ -57,7 +57,7 @@ def process_one_line(line, count):
             ext = "pdf"
         elif file_name.lower().endswith(".jpg") :
             ext = "jpg"
-        print 'Extension=',ext
+        print('Extension=',ext)
         
     
         htr = HaftarahReading(
@@ -70,7 +70,7 @@ def process_one_line(line, count):
         htr.save()
         
 
-        print 'sequence number = ', count
+        print('sequence number = ', count)
 # end process_one_line
 
 def build_db_from_text(fh, clear=True):
@@ -106,15 +106,15 @@ def build_db_from_text(fh, clear=True):
             # devarim.save()
             
             # breshit = BookName.objects.get(pk='Breshit')
-            # print breshit.name
+            # print(breshit.name
             # shemot = BookName.objects.get(pk='Shemot')
-            # print shemot.name
+            # print(shemot.name
             # vayikra = BookName.objects.get(pk='Vayikra')
-            # print vayikra.name
+            # print(vayikra.name
             # bemidbar = BookName.objects.get(pk='Bemidbar')
-            # print bemidbar.name
+            # print(bemidbar.name
             # devarim = BookName.objects.get(pk='Devarim')
-            # print devarim.name
+            # print(devarim.name
             
             # # add parshas
             # psh = ParshaName(book_name=breshit, name='Breshit', display='Parshat Breshit',seq_number=1)
@@ -122,8 +122,8 @@ def build_db_from_text(fh, clear=True):
             
             # # verify the foreign key is working as expected
             # tmp1 = ParshaName.objects.get(pk='Breshit')
-            # print tmp1.name, tmp1.display
-            # print tmp1.book_name.name
+            # print(tmp1.name, tmp1.display
+            # print(tmp1.book_name.name
             
             # psh = ParshaName(book_name=breshit, name='Noach', display='Parshat Noach',seq_number=2)
             # psh.save()
@@ -292,8 +292,8 @@ def build_db_from_text(fh, clear=True):
             line_count += 1
         fh.close()
     except:
-        # print line_count, line
-        print "Something bad happened:", sys.exc_info()[0]
+        # print(line_count, line
+        print("Something bad happened:", sys.exc_info()[0])
         fh.close()
         raise
 # end build_db_from_text

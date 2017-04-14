@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load music_extras %} 
 {% block content %}
 <div class="row" id="index-table">
     <div class="table-responsive">
         <table class="table table-striped table bordered table-hover">
             <tr><th>Learning the Services</th></tr>
             {% for srv in services %}
-            <tr><td><a href="/service/{{srv.name}}/">{{ srv.display }}</a></td></tr>
+            <tr><td><a href="/{% SERVICE %}/{{srv.name}}/">{{ srv.display }}</a></td></tr>
             {% endfor %}
             <tr><th>Learning the Torah Readings</th></tr>
-            <tr><td><a href="/torahreading/">Torah Readings</a></td></tr>
+            <tr><td><a href="/{% TORAH %}/">Torah Readings</a></td></tr>
             <tr><th>Learning the Haftarah Readings</th></tr>
-            <tr><td><a href="/haftarahreading/">Haftarah Readings</a></td></tr>
+            <tr><td><a href="/{% HAFTARAH %}/">Haftarah Readings</a></td></tr>
         </table>
     </div>
 </div>

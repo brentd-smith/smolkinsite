@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/{% TORAH %}">Torah Readings</a></li>
+  <li><a href="/{% TORAH %}/{{ book.name }}/">{{ book.display }}</a></li>
+  <li><a href="/{% TORAH %}/{{ book.name }}/{{ parsha.name }}/">{{ parsha.display }}</a></li>
+  <li class="active">Torah Readings</li>
+</ol>
+<div class="row" id="index-table">
+    <div class="table-responsive">
+        <table class="table table-striped table bordered table-hover">
+            <tr><th>Torah Readings in {{ parsha.display }}</th></tr>
+            {% for rd in readings  %}
+            <tr><td><a href="/{% TORAH %}/{{book.name}}/{{parsha.name}}/{{ rd.triennial }}/{{ rd.aliyah }}">{{ rd.display }}</a></td></tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
