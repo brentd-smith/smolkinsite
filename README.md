@@ -1,30 +1,22 @@
-# Heroku Django Starter Template
+# Jewish Prayers & Songs Website
 
-An utterly fantastic project starter template for Django 1.10.
+Website for learning how to chant the traditional Torah and Haftarah Shabbat Readings. Also includes songs traditionally sung in Conservative Synagogues on Friday Night and Shabbat Morning.
 
 ## Features
 
-- Production-ready configuration for Static Files, Database Settings, Gunicorn, etc.
-- Enhancements to Django's static file serving functionality via WhiteNoise.
-- Latest Python 3.6 runtime environment. 
+Each song/prayer/reading includes recordings of the melody/chant alongside lyrics that are in Hebrew and sometimes transliterated for easier learning.
 
 ## How to Use
 
-To use this project, follow these steps:
 
-1. Create your working environment.
-2. Install Django (`$ pip install django`)
-3. Create a new project using this template
+## Project Information
 
-## Creating Your Project
+Created with the heroku-django-template ::
 
-Using this template to create a new Django app is easy::
+    $ django-admin.py startproject --template=https://github.com/heroku/heroku-django-template/archive/master.zip --name=Procfile smolkinsite
 
-    $ django-admin.py startproject --template=https://github.com/heroku/heroku-django-template/archive/master.zip --name=Procfile helloworld
-
-(If this doesn't work on windows, replace `django-admin.py` with `django-admin`)
-
-You can replace ``helloworld`` with your desired project name.
+- Uses Python3
+- Uses Django 1.11
 
 ## Deployment to Heroku
 
@@ -37,17 +29,4 @@ You can replace ``helloworld`` with your desired project name.
 
     $ heroku run python manage.py migrate
 
-See also, a [ready-made application](https://github.com/heroku/python-getting-started), ready to deploy.
 
-## Using Python 2.7?
-
-Just update `runtime.txt` to `python-2.7.13` (no trailing spaces or newlines!).
-
-
-## License: MIT
-
-## Further Reading
-
-- [Gunicorn](https://warehouse.python.org/project/gunicorn/)
-- [WhiteNoise](https://warehouse.python.org/project/whitenoise/)
-- [dj-database-url](https://warehouse.python.org/project/dj-database-url/)
