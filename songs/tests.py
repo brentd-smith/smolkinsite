@@ -10,9 +10,9 @@ class SimpleSiteTests(TestCase):
         self.assertTrue(True)
 
     def test_index_page(self):
-        c = Client()
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
-        response = c.get('/')
-        self.assertEqual(response.status_code, 200)
-        obj = BeautifulSoup(response.content, "html.parser")
-        self.assertEqual(obj.th, "Learning the Services")
+        r = c.get('')
+        self.assertEqual(r.status_code, 200)
+
+
+
