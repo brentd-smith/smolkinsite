@@ -7,5 +7,6 @@ deploy:
   provider: heroku
   api_key:
     secure: OqJu6sLtNcJEuha3AcurOleZxUsCXxnXsOOJwgpS6i+fIV+L9NWRYQF8+wxZKFPF2EVFFYMNdqL5r3vVAmhCezWszRWh/g25Y5Smu55hy3Qd3Ao3N4WVH4eGsP3AcrnPo8IwE2cR5AqdHFqFHIzmsYuPHmEUYpXOGYZZLzX4eheMDrFk5d5SJcKenFrxNZgQxSGq9YXD09wpSaZz+/RkPqV1uBvaeYR1bjTwtPI/IUzEYfCnacF6IA7zxmLgas7Ytysm3DHxSYo2BGTVYv0FyiepY7zfOPtu+10zAzIxdXLNu90kb8bZu1o8JUDlHjf+WUVUtUFpMN5iGTeJpMnFt9A9K5oTpdsHrVZExqTZUG4GviF1F6Azzqu4wFp5uGB4FEwrmhGlIAJzrNO+WbLZiHOOpsm0/ANDuzex92ZfcbXRivAB4fuf767hykMPqWM4Rp7j+a02ZFfSqBdtYzGfFwjQG0C7iAGqcz+5jZDjdAv/2UFRNLCt7acpvbVsOVPOuNNyQWz9AscfEknDRm73lCcFMzdVq5rxpyjFoICb81P1XjGtXh8mLLGQfT85i7Cmxx/PvnB8nj9A/zIQtMx+bfDqKOplDJH0GLq/6k7f3QrdUWGO3m0jDAyaGl16hdk3S9sRfwj7lxdbeSiS2SlTXzvT+tPNxLDAv2Unm+gRgNo=
-  master: smolkin-site-staging
-  production: smolkin-site-production
+  app:
+    master: smolkin-site-staging
+    production: smolkin-site-production
