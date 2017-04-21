@@ -69,25 +69,8 @@ def build_db_from_text(fh, clear=True):
     try:
         
         if clear:
+            addServices()
             
-            service_names = ServiceName.objects.all()
-            service_names.delete()
-            
-            songs = Song.objects.all()
-            songs.delete()
-
-            sn = ServiceName("KabbalatShabbat", "Kabbalat Shabbat", 1)
-            sn.save()
-            
-            sn = ServiceName("FridayNight", "Friday Night Maariv", 2)
-            sn.save()
-            
-            sn = ServiceName("TorahService", "Shabbat Torah Service", 3)
-            sn.save()
-            
-            sn = ServiceName("Musaf", "Shabbat Musaf Service", 4)
-            sn.save()
-
         line_count = 0
         for line in fh:
             if line.find('/work/') < 0 :
@@ -101,6 +84,25 @@ def build_db_from_text(fh, clear=True):
         fh.close()
         raise
 # end build_db_from_text
+
+def addServices():
+    service_names = ServiceName.objects.all()
+    service_names.delete()
+    
+    songs = Song.objects.all()
+    songs.delete()
+
+    sn = ServiceName("KabbalatShabbat", "Kabbalat Shabbat", 1)
+    sn.save()
+    
+    sn = ServiceName("FridayNight", "Friday Night Maariv", 2)
+    sn.save()
+    
+    sn = ServiceName("TorahService", "Shabbat Torah Service", 3)
+    sn.save()
+    
+    sn = ServiceName("Musaf", "Shabbat Musaf Service", 4)
+    sn.save()
 
 def text2db(file_name='services.txt'):
     build_db_from_text(fileinput.input(file_name))
