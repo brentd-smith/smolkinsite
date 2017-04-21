@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/brentd-smith/smolkinsite.svg?branch=master)](https://travis-ci.org/brentd-smith/smolkinsite)
+
+
 # Jewish Prayers & Songs Website
 
 Website for learning how to chant the traditional Torah and Haftarah Shabbat Readings. Also includes songs traditionally sung in Conservative Synagogues on Friday Night and Shabbat Morning.
