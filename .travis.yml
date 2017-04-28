@@ -18,5 +18,4 @@ deploy:
     - python manage.py dataload --services
     - python manage.py dataload --torah
     - python manage.py dataload --haftarah
-    - python manage.py test
-  
+
