@@ -142,7 +142,7 @@ def process_one_line(line, count, debug=True):
         #     file_name=file_name)
         # sg.save()
         
-        print('sequence number = ', count)
+        if (debug): print('sequence number = ', count)
 # end process_one_line
 
 def build_db_from_text(fh, clear=True):
@@ -158,7 +158,7 @@ def build_db_from_text(fh, clear=True):
 
         line_count = 0
         for line in fh:
-            process_one_line(line, line_count)
+            process_one_line(line, line_count, debug=False)
             line_count += 1
         fh.close()
     except:
@@ -178,6 +178,8 @@ def addBooksAndParshas():
     Clear the database by deleting all currently added Books and Parshas. Then
     add all books and parshas to the database.
     """
+    print("loading books and parshas...")
+    
     book_names = BookName.objects.all()
     book_names.delete()
     

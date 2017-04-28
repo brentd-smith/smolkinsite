@@ -39,7 +39,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
             
         if options['torah']:
-            self.stdout.write("Loading the torah readings...")
+            self.stdout.write("loading the torah readings...")
             text2torah.text2db()
         elif options['haftarah']:
             self.stdout.write("loading the haftarah readings...")
