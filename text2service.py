@@ -13,33 +13,33 @@ DIRECTORIES = set()
 
 valid_dir_name = re.compile(PARSERS['dir'])
 
-def process_one_line(line, count):
+def process_one_line(line, count, debug=False):
 
     line = line.rstrip("\n\r")
     line = line.rstrip('/')
     folders = line.split('/')
     if len(folders) == 3:
-        print('folders=', folders)
+        if (debug): print('folders=', folders)
         service_folder = folders[0]
         # if service_folder.find("Kabbalat Shabbat") >= 0:
         service_name = valid_dir_name.match(service_folder).group(2)
-        print('ServiceName=', service_name)
+        if (debug): print('ServiceName=', service_name)
         service_key = service_name.replace(" ", "")
         srv = ServiceName.objects.get(pk=service_key)
-        print('srv.name=', srv.name)
+        if (debug): print('srv.name=', srv.name)
         
         song_folder = folders[1]
-        print('SongFolder=', song_folder)
+        if (debug): print('SongFolder=', song_folder)
         
         song_name = valid_dir_name.match(song_folder).group(2)
-        print('SongName=', song_name)
+        if (debug): print('SongName=', song_name)
         
         page_number = int(valid_dir_name.match(song_folder).group(1))
-        print('PageNumber=', page_number)
+        if (debug): print('PageNumber=', page_number)
         
         file_folder = folders[2]
         file_name = valid_dir_name.match(file_folder).group(2)
-        print('FileName=',file_name)
+        if (debug): print('FileName=',file_name)
         
         # Figure out the extension
         ext=''
@@ -49,7 +49,7 @@ def process_one_line(line, count):
             ext = "pdf"
         elif file_name.lower().endswith(".jpg") :
             ext = "jpg"
-        print('Extension=',ext)
+        if (debug): print('Extension=',ext)
         
         sg = Song(
             service_name=srv, 
@@ -62,7 +62,7 @@ def process_one_line(line, count):
             file_name=file_name)
         sg.save()
         
-        print('sequence number = ', count)
+        if (debug): print('sequence number = ', count)
 # end process_one_line
 
 def build_db_from_text(fh, clear=True):
