@@ -104,6 +104,10 @@ class BookName(models.Model):
 
     def __str__(self):
         return self.display
+    
+    # Suitable for use in an S3 object key 01 - Breshit (Genesis)   
+    def object_key(self):
+        return "%02d - %s" % (self.seq_number, self.display)
 
 # Represents a Parsha from one of the books of the Torah
 class ParshaName(models.Model):
@@ -111,14 +115,17 @@ class ParshaName(models.Model):
     # FK to the BookName class, each book has 1-N Parshas
     book_name = models.ForeignKey(BookName, on_delete=models.CASCADE)
 
-    # The name of the Parsha, ex: "Noach"
+    # The name of the Parsha, ex: "Vayikra"
     name = models.CharField(max_length=64, primary_key=True)
 
-    # More descriptive name, ex: "Breshit (Genesis)"
+    # More descriptive name, ex: "Parshat Vayikra"
     display = models.CharField(max_length=64, null=False)
     
     # Sequence Number/Sort Order for display in web site
     seq_number = models.PositiveSmallIntegerField(null=False)
+
+    # Sequence Number that is prepended to the display name as part of the object key
+    prefix = models.CharField(max_length=4,null=False)
 
     # check to see if there is a haftarah reading present for this parsha
     def has_haftarah(self):
@@ -154,6 +161,11 @@ class ParshaName(models.Model):
         
     def __str__(self):
         return self.display
+        
+    # Suitable for use in an S3 object key 01 Parshat Vayikra
+    def object_key(self):
+        return "%s %s" % (self.prefix, self.display)
+
 
 # Represents a Reading - Either a Torah Reading or a Haftarah Reading
 class TorahReading(models.Model):
