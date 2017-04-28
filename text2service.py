@@ -13,7 +13,7 @@ DIRECTORIES = set()
 
 valid_dir_name = re.compile(PARSERS['dir'])
 
-def process_one_line(line, count):
+def process_one_line(line, count, debug=False):
 
     line = line.rstrip("\n\r")
     line = line.rstrip('/')
