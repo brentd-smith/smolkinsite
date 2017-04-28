@@ -320,8 +320,8 @@ def addBooksAndParshas():
     psh = ParshaName(book_name=bemidbar, name='Behaalotcha', display='Parshat Behaalotcha',seq_number=36, prefix="03")
     psh.save()
     
-    # psh = ParshaName(book_name=bemidbar, name='Shelach', display='Parshat Shelach',seq_number=37, prefix="04")
-    # psh.save()
+    psh = ParshaName(book_name=bemidbar, name='Shelach', display='Parshat Shelach',seq_number=37, prefix="03")
+    psh.save()
     
     psh = ParshaName(book_name=bemidbar, name='ShlachLecha', display='Parshat Shlach Lecha', seq_number=37, prefix="04")
     psh.save()
