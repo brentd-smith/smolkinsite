@@ -9,17 +9,19 @@ import text2torah
 from django.core.management import call_command
 from django.utils.six import StringIO
 
-# Create your tests here.
+# ------------------------------------------------------------------------------
+# Test of the Index page, and the Services pages
+# ------------------------------------------------------------------------------
 class SimpleSiteTests(TestCase):
     
     def setUp(self):
-        text2service.addServices()
+        text2service.loadTestData()
 
-    # testing suite is working as expected
+    # Make sure the testing suite is working as expected.
     def test_assertion(self):
         self.assertTrue(True)
 
-    # expected index page is present with expected table header text
+    # Make sure the index page is present with the expected table header text.
     def test_index_page(self):
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
         r = c.get('')
@@ -29,7 +31,7 @@ class SimpleSiteTests(TestCase):
         expected = "<th>Learning the Services</th>"
         self.assertEqual(str(obj.th), expected)
 
-    # all expected services are present
+    # Make sure the index page returns correctly and that all expected services are present.
     def test_index_page_services(self):
         c = Client(HTTP_USER_AGENT='Mozilla/5.0')
         r = c.get('')
@@ -46,12 +48,42 @@ class SimpleSiteTests(TestCase):
             self.assertTrue(re.search(s, str(obj)))
 
 
+    # Make sure the song_list page returns correctly.
+    def test_service_song_list(self):
+        c = Client(HTTP_USER_AGENT='Mozilla/5.0')
+        r = c.get('/ServiceName/KabbalatShabbat/')
+        self.assertEqual(r.status_code, 200)
+        
+        obj = BeautifulSoup(r.content, "html.parser")
+        expected = "<th>Songs for Kabbalat Shabbat</th>"
+        self.assertEqual(str(obj.th), expected)
+
+        obj = BeautifulSoup(r.content, "html.parser")
+        first  = obj.find("td")
+        self.assertTrue(re.search("Shalom Alechem", str(first)))
+        
+    # Make sure the song_detail page returns correctly.
+    def test_service_song_detail(self):
+        c = Client(HTTP_USER_AGENT='Mozilla/5.0')
+        r = c.get('/ServiceName/KabbalatShabbat/ShalomAlechem/')
+        self.assertEqual(r.status_code, 200)
+        
+        obj = BeautifulSoup(r.content, "html.parser")
+        expected = "<h3>Shalom Alechem</h3>"
+        self.assertEqual(str(obj.h3), expected)
+
+        obj = BeautifulSoup(r.content, "html.parser")
+        first  = obj.find("h4")
+        self.assertTrue(re.search("Shalom Alechem A.mp3", str(first)))
+
+# ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 class Text2TorahTests(TestCase):
     
     # TODO: Create a loadTestData procedure that loads a limited set of data for testing purposes
     # that will help keep the tests fast...
     def setUp(self):
-        text2torah.text2db()
+        text2torah.loadTestData()
 
     def test_get_object_key(self):
         # filename: 3rd Triennial Noach 6th Aliyah.pdf
@@ -80,9 +112,24 @@ class Text2TorahTests(TestCase):
         # should have a list of Parshas, starting with Breshit    
         first = obj.find("td")
         self.assertTrue(re.search("Breshit", str(first)))
-        
 
+    def test_torah_reading_list(self):
+        # "<th>Torah Readings in {{ parsha.display }}</th>"
+        c = Client(HTTP_USER_AGENT='Mozilla/5.0')
+        r = c.get('/TorahReading/Breshit/Breshit/')
+        self.assertEqual(r.status_code, 200)
+        
+        obj = BeautifulSoup(r.content, "html.parser")
+        title = obj.th
+        self.assertEqual(str(title), "<th>Torah Readings in Parshat Breshit</th>")
+
+        # should have a list of Parshas, starting with Breshit    
+        first = obj.find("td")
+        self.assertTrue(re.search("2nd Triennial 5th Aliyah", str(first)))
+
+# ------------------------------------------------------------------------------
 # Management Command Tests
+# ------------------------------------------------------------------------------
 class ManagementCommandTests(TestCase):
     
     def test_hello(self):

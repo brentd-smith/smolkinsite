@@ -85,6 +85,23 @@ def build_db_from_text(fh, clear=True):
         raise
 # end build_db_from_text
 
+def loadTestData():
+    
+    # Clear the Services
+    service_names = ServiceName.objects.all()
+    service_names.delete()
+    
+    # Clear the Songs
+    songs = Song.objects.all()
+    songs.delete()
+
+    # Load All the Services
+    addServices()
+
+    # Load 1 Song
+    build_db_from_text(fileinput.input('test_services.txt'), False)
+    
+
 def addServices():
     service_names = ServiceName.objects.all()
     service_names.delete()
