@@ -4,9 +4,12 @@ from bs4 import BeautifulSoup
 import re
 
 import text2service
+import text2torah
+
+from django.core.management import call_command
+from django.utils.six import StringIO
 
 # Create your tests here.
-
 class SimpleSiteTests(TestCase):
     
     def setUp(self):
@@ -42,5 +45,21 @@ class SimpleSiteTests(TestCase):
             # self.assertTrue(searchPattern in services, "Did not find {} in {}".format(searchPattern, services))
             self.assertTrue(re.search(s, str(obj)))
 
+class Text2TorahTests(TestCase):
+    
+    def setUp(self):
+        text2torah.addBooksAndParshas()
+        
+    def test_get_object_key(self):
+        # filename: 3rd Triennial Noach 6th Aliyah.pdf
+        # returns:  07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah/
+        result = text2torah.get_object_key("3rd Triennial Noach 6th Aliyah.pdf", debug=False)
+        self.assertEqual(result, "07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah")
 
-
+# Management Command Tests
+class ManagementCommandTests(TestCase):
+    
+    def test_hello(self):
+        out = StringIO()
+        call_command('hello', 51, stdout=out)
+        self.assertIn('Hello id=51', out.getvalue())
