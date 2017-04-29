@@ -42,14 +42,15 @@ def upload_zip(zip_file_name, debug=False):
     with zipfile.ZipFile(zip_file_name) as zf:
         for info in zf.infolist():
             with zf.open(info.filename) as myfile:
-                # TODO: object_key will be more involved, will include Service / Book / Parsha 
                 # 07 - Torah Readings/03 - Vayikra (Leviticus)/09.5 Parshat Behar - Bechukotai
                 final_key = os.path.normpath(os.path.join(the_key, info.filename))
                 if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, name_of_bucket))
-                s3.Bucket(name_of_bucket).put_object(Key=final_key, Body=myfile.read())
+                s3.Bucket(name_of_bucket).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
             
 # works even when the "folders" my, key, and name have not been created yet
 # s3.Object(name_of_bucket, "my/key/name/services.txt").upload_file("services.txt")
+
+# TODO: Security, ACL, need to set all uploads to public read...
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
