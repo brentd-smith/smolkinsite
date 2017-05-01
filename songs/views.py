@@ -134,17 +134,19 @@ def document_list(request):
         # process the document...
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'])
-            newdoc.save()
+            # newdoc.save()
             
             message = ''
             try:
                 zip_file_name = newdoc.docfile
-                zipTorah.createImagesFromPdf(zip_file_name)
-                s3.upload_zip(zip_file_name)
-                zipTorah.loadMetadataToDb(zip_file_name)
+                zipTorah.createImagesFromPdf(zip_file_name, debug=True)
+                s3.upload_zip(zip_file_name, debug=True)
+                zipTorah.loadMetadataToDb(zip_file_name, debug=True)
                 message = 'Successfully processed file = {}'.format(zip_file_name)
+                print(message)
             except:
                 message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
+                print(message)
 
             # Redirect to the document list after POST
             # return HttpResponseRedirect(reverse('list'))
