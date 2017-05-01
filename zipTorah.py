@@ -22,7 +22,10 @@ def createImagesFromPdf(zip_file_name, debug=False):
     and crop whitespace.
     """
     # extract
-    if (debug): print("ZIP Archive: {}".format(zip_file_name))
+    if (debug): 
+        print("Method: zipTorah.createImagesFromPdf()")
+        print("ZIP Archive: {}".format(zip_file_name))
+        
     with zipfile.ZipFile(zip_file_name) as zf:
         
         for info in zf.infolist():
@@ -79,7 +82,10 @@ def loadMetadataToDb(zip_file_name, debug=False):
     
     # Get the PDF filename
     pdf_filename = ''
-    if (debug): print("ZIP Archive: {}".format(zip_file_name))
+    if (debug): 
+        print("Method: zipTorah.loadMetadataToDb()")
+        print("ZIP Archive: {}".format(zip_file_name))
+        
     with zipfile.ZipFile(zip_file_name) as zf:
         for info in zf.infolist():
             filename, extension = os.path.splitext(info.filename)

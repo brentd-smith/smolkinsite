@@ -28,7 +28,10 @@ def upload_zip(zip_file_name, debug=False):
     
     # Get the PDF filename
     pdf_filename = ''
-    if (debug): print("ZIP Archive: {}".format(zip_file_name))
+    if (debug): 
+        print("Method: s3.upload_zip()")
+        print("ZIP Archive: {}".format(zip_file_name))
+        
     with zipfile.ZipFile(zip_file_name) as zf:
         for info in zf.infolist():
             filename, extension = os.path.splitext(info.filename)
