@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+# from songs.views import list
 import songs.views
 
 urlpatterns = [
@@ -34,4 +35,7 @@ urlpatterns = [
     url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/$', songs.views.parsha_list),
     url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/$', songs.views.haftarah_reading),
     
+    # uploading files
+    url(r'^docs/$', songs.views.document_list),
+
 ]

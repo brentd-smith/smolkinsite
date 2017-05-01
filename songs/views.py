@@ -1,8 +1,9 @@
 from django.shortcuts import render
-
-# Create your views here.
-
-from songs.models import ServiceName, Song, BookName, ParshaName, TorahReading, HaftarahReading
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from songs.models import ServiceName, Song, \
+BookName, ParshaName, TorahReading, HaftarahReading, Document
+from .forms import DocumentForm
 
 # default, root view
 def index(request):
@@ -114,3 +115,48 @@ def haftarah_reading(request, service_type, book_name, parsha_name):
         'audio_files': audio_files, 
         'lyric_doc': lyric_doc, 
         'song': song, 'parsha': parsha, 'book': book, 'reading_type': reading_type, 'service_type': service_type})
+        
+
+import s3
+import zipTorah
+# from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+
+# Dealing with uploading files
+#@login_required(login_url='/admin/')
+@staff_member_required
+def document_list(request):
+    
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        
+        # process the document...
+        if form.is_valid():
+            newdoc = Document(docfile=request.FILES['docfile'])
+            newdoc.save()
+            
+            message = ''
+            try:
+                zip_file_name = newdoc.docfile
+                zipTorah.createImagesFromPdf(zip_file_name)
+                s3.upload_zip(zip_file_name)
+                zipTorah.loadMetadataToDb(zip_file_name)
+                message = 'Successfully processed file = {}'.format(zip_file_name)
+            except:
+                message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
+
+            # Redirect to the document list after POST
+            # return HttpResponseRedirect(reverse('list'))
+    else:
+        form = DocumentForm()  # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render(
+        request,
+        'list.html',
+        {'documents': documents, 'form': form}
+    )
