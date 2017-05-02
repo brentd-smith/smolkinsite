@@ -25,10 +25,11 @@ def song_list(request, service_name):
             DUPLICATES.add(s.name)
     return render(request, 'song_list.html', {'songs': LIST, 'service': service})
 
-def is_jpg(x): return x.extension == "jpg"
+def is_jpg(x): return x.extension == "jpg" or x.extension == "png"
 def is_pdf(x): return x.extension == "pdf" 
 def is_mp3(x): return x.extension == "mp3"
 
+# Song/Service details
 def song_detail(request, service_name, song_name):
     details = Song.objects.filter(name=song_name)
     service = ServiceName.objects.get(pk=service_name)
