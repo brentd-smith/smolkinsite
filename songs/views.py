@@ -176,14 +176,14 @@ def model_form_upload(request):
             
             message = ''
             try:
-                zip_file_name = newdoc.docfile
+                zip_file_name = form.document
                 zipTorah.createImagesFromPdf(zip_file_name, debug=True)
                 s3.upload_zip(zip_file_name, debug=True)
                 zipTorah.loadMetadataToDb(zip_file_name, debug=True)
                 message = 'Successfully processed file = {}'.format(zip_file_name)
                 print(message)
             except:
-                message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
+                message = 'An error occurred during processing file = {}'.format(form.document)
                 print(message)
 
             return redirect('/')
