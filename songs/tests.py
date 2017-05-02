@@ -136,3 +136,24 @@ class ManagementCommandTests(TestCase):
         out = StringIO()
         call_command('hello', 51, stdout=out)
         self.assertIn('Hello id=51', out.getvalue())
+
+import smolkinsite.settings
+# ------------------------------------------------------------------------------
+# Configuration Tests
+# ------------------------------------------------------------------------------
+class ConfigurationTests(TestCase):
+    
+    def setUp(self):
+        pass
+
+    def test_cookie_settings(self):
+        self.assertTrue(smolkinsite.settings.CSRF_COOKIE_SECURE != smolkinsite.settings.DEBUG)
+        self.assertTrue(smolkinsite.settings.SESSION_COOKIE_SECURE != smolkinsite.settings.DEBUG)
+    
+    def test_allowed_hosts(self):
+        if smolkinsite.settings.DEBUG:
+            self.assertIn('*', smolkinsite.settings.ALLOWED_HOSTS)
+        else:
+            self.assertNotIn('*', smolkinsite.settings.ALLOWED_HOSTS)
+    
+    

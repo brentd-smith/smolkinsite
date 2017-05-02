@@ -54,7 +54,11 @@ def upload_zip(zip_file_name, debug=False):
                 # 07 - Torah Readings/03 - Vayikra (Leviticus)/09.5 Parshat Behar - Bechukotai
                 final_key = os.path.normpath(os.path.join(the_key, info.filename))
                 if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, NAME_OF_BUCKET))
-                s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
+                try:
+                    s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
+                except Exception, e:
+                    raise e
+
                 if (debug): print("\tCopying of data to S3 completed successfully.")
             
 # works even when the "folders" my, key, and name have not been created yet
