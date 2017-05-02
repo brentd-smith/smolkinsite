@@ -22,8 +22,11 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', "S2yc8RGa7UYB4zHxQDVnhUSWJnY6VCz9CQyhMUZkBx2rwpTGEJDW2VmKFXKR68e")
 
+PLATFORM = os.environ.get('C9_HOSTNAME', "remote")
+
 # SECURITY WARNING: don't run with debug turned on in production! Default to False.
 DEBUG = os.environ.get('DEBUG', False)
+print("DEBUG is {}".format(DEBUG))
 
 # Set this to True to avoid transmitting the CSRF cookie over HTTP accidentally.
 CSRF_COOKIE_SECURE = not DEBUG
@@ -33,14 +36,14 @@ SESSION_COOKIE_SECURE = not DEBUG
 
 # Allow all host headers
 ALLOWED_HOSTS = []
-if DEBUG: 
+if PLATFORM != "remote" : 
     ALLOWED_HOSTS = ['*']
 else:
     try:
         ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(",")
     except KeyError:
         ALLOWED_HOSTS =  "localhost, 127.0.0.1, [::1]".split(",")
-
+print("ALLOWED_HOSTS IS {}".format(ALLOWED_HOSTS))
 
 # Application definition
 INSTALLED_APPS = [
