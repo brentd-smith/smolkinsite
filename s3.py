@@ -12,7 +12,7 @@ NAME_OF_BUCKET = None
 try:
     NAME_OF_BUCKET = os.environ['BUCKET_NAME']
 except KeyError:
-    name_of_bucket = "testing-file-uploads"
+    NAME_OF_BUCKET = "testing-file-uploads"
     
 ## Connect to a bucket
 s3 = boto3.resource('s3')
@@ -25,7 +25,9 @@ Given a ZIP Archive file
 """
 
 def upload_zip(zip_file_name, debug=False):
-    
+
+    if (debug): print("Bucket Name = {}".format(NAME_OF_BUCKET))
+
     # Get the PDF filename
     pdf_filename = ''
     if (debug): 
@@ -40,6 +42,7 @@ def upload_zip(zip_file_name, debug=False):
     
     # Extract the KEY information
     the_key = get_object_key(pdf_filename, debug)
+    if (debug): print("Retrieved object key = {}".format(the_key))
     
     # Copy all files to the S3 bucket
     with zipfile.ZipFile(zip_file_name) as zf:
@@ -50,12 +53,12 @@ def upload_zip(zip_file_name, debug=False):
                 if (debug): print("\tOpening file, ready to copy...")
                 # 07 - Torah Readings/03 - Vayikra (Leviticus)/09.5 Parshat Behar - Bechukotai
                 final_key = os.path.normpath(os.path.join(the_key, info.filename))
-                if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, name_of_bucket))
-                s3.Bucket(name_of_bucket).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
+                if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, NAME_OF_BUCKET))
+                s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
                 if (debug): print("\tCopying of data to S3 completed successfully.")
             
 # works even when the "folders" my, key, and name have not been created yet
-# s3.Object(name_of_bucket, "my/key/name/services.txt").upload_file("services.txt")
+# s3.Object(NAME_OF_BUCKET, "my/key/name/services.txt").upload_file("services.txt")
 
 # TODO: Security, ACL, need to set all uploads to public read...
 
