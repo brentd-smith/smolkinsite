@@ -35,7 +35,8 @@ ALIYAHS = (
 MP3 = "mp3"
 PDF = "pdf"
 JPG = "jpg"
-EXTENSIONS = ((MP3, MP3), (PDF, PDF), (JPG, JPG))
+PNG = "png"
+EXTENSIONS = ((MP3, MP3), (PDF, PDF), (JPG, JPG), (PNG, PNG))
 
 
 # Represents one of the services at OZS
