@@ -54,11 +54,21 @@ def createImagesFromPdf(zip_file_name, debug=False):
     
     # add the new image files created from the PDF
     with zipfile.ZipFile(zip_file_name, mode='a') as zf:
-        for f in to_append:
-            if (debug): print("Added file {} to the archive.".format(f))
-            zf.write(f)
-            if (debug): print("Removing file: {}".format(f))
-            os.remove(f)
+        try:
+            for f in to_append:
+                if (debug): print("Added file {} to the archive.".format(f))
+                zf.write(f)
+                if (debug): print("Removing file: {}".format(f))
+                os.remove(f)
+        except Exception:
+            import sys, traceback
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            # print the traceback
+            traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+            # print the exception
+            traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
+        else:
+            print("Successfully added new image file names...")
             
     
     # show the contents of the final ZIP Archive after processing
