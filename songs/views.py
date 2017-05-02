@@ -173,7 +173,7 @@ def model_form_upload(request):
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            
+            assert(False)
             message = ''
             try:
                 zip_file_name = form.document
