@@ -56,11 +56,15 @@ def upload_zip(zip_file_name, debug=False):
                 if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, NAME_OF_BUCKET))
                 try:
                     s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
-                except Exception as e:
-                    if (debug): print("Exception occurred! {}".format(e))
-                    raise e
-
-                if (debug): print("\tCopying of data to S3 completed successfully.")
+                except Exception:
+                    import sys, traceback
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    # print the traceback
+                    traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+                    # print the exception
+                    traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
+                else:
+                    if (debug): print("\tCopying of data to S3 completed successfully.")
             
 # works even when the "folders" my, key, and name have not been created yet
 # s3.Object(NAME_OF_BUCKET, "my/key/name/services.txt").upload_file("services.txt")
