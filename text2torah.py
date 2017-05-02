@@ -95,6 +95,8 @@ def process_one_line(line, count, debug=True):
             ext = "pdf"
         elif file_name.lower().endswith(".jpg") :
             ext = "jpg"
+        elif file_name.lower().endswith(".png") :
+            ext = "png"
         if (debug): 
             print('Extension=',ext)
         
