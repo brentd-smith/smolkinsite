@@ -16,20 +16,31 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "(mc*=yevuo@7fazwj(kdmvtguu12hv%5_@h-a()(6zp*j!dz&k"
+SECRET_KEY = os.environ.get('SECRET_KEY', "S2yc8RGa7UYB4zHxQDVnhUSWJnY6VCz9CQyhMUZkBx2rwpTGEJDW2VmKFXKR68e")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-try:
-    debugVar = os.environ['DEBUG']
-    DEBUG = (debugVar == 'True')
-except KeyError:
-    DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production! Default to False.
+DEBUG = os.environ.get('DEBUG', False)
+
+# Set this to True to avoid transmitting the CSRF cookie over HTTP accidentally.
+CSRF_COOKIE_SECURE = not DEBUG
+
+# Set this to True to avoid transmitting the session cookie over HTTP accidentally.
+SESSION_COOKIE_SECURE = not DEBUG
+
+# Allow all host headers
+ALLOWED_HOSTS = []
+if DEBUG: 
+    ALLOWED_HOSTS = ['*']
+else:
+    try:
+        ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(",")
+    except KeyError:
+        ALLOWED_HOSTS =  "localhost, 127.0.0.1, [::1]".split(",")
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -121,8 +132,6 @@ DATABASES['default'].update(db_from_env)
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
