@@ -43,12 +43,16 @@ def upload_zip(zip_file_name, debug=False):
     
     # Copy all files to the S3 bucket
     with zipfile.ZipFile(zip_file_name) as zf:
+        if (debug): print("\tBeginning copy of all files to the S3 bucket...")
         for info in zf.infolist():
+            if (debug): print("\tInside for loop, info.filename = {}".format(info.filename))
             with zf.open(info.filename) as myfile:
+                if (debug): print("\tOpening file, ready to copy...")
                 # 07 - Torah Readings/03 - Vayikra (Leviticus)/09.5 Parshat Behar - Bechukotai
                 final_key = os.path.normpath(os.path.join(the_key, info.filename))
                 if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, name_of_bucket))
                 s3.Bucket(name_of_bucket).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
+                if (debug): print("\tCopying of data to S3 completed successfully.")
             
 # works even when the "folders" my, key, and name have not been created yet
 # s3.Object(name_of_bucket, "my/key/name/services.txt").upload_file("services.txt")
