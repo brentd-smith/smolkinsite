@@ -5,7 +5,8 @@ from songs.models import ServiceName, Song, \
 BookName, ParshaName, TorahReading, HaftarahReading, Document
 from .forms import DocumentForm
 from django.conf import settings
-
+import os
+import os.path
 
 # default, root view
 def index(request):
@@ -169,23 +170,38 @@ def document_list(request):
 # Upload via the Model Form
 @staff_member_required
 def model_form_upload(request):
+
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
+            # Save the document on the file system and the meta data in the db
             form.save()
-            assert(False)
+            dscr =request.POST['description']
+        
+            print('Description entered by user: {}'.format(dscr))
+            uploaded_doc = Document.objects.all().filter(description = dscr)
+            
+            # TODO: Make description a unique field in the Model
+            # if uploaded_doc (is not None) and len(uploaded_doc) == 1
+            theDocument = uploaded_doc[0].document
+            print("The name of the document just saved is: {}".format(theDocument.name))
+            
+            # process theDocument
             message = ''
             try:
-                zip_file_name = form.document
+                # import pdb; pdb.set_trace()
+                zip_file_name = os.path.join(settings.MEDIA_ROOT, theDocument.name)
+                print("Zip File Name = {}".format(zip_file_name))
                 zipTorah.createImagesFromPdf(zip_file_name, debug=True)
                 s3.upload_zip(zip_file_name, debug=True)
                 zipTorah.loadMetadataToDb(zip_file_name, debug=True)
                 message = 'Successfully processed file = {}'.format(zip_file_name)
                 print(message)
             except:
-                message = 'An error occurred during processing file = {}'.format(form.document)
+                message = 'An error occurred during processing file = {}'.format(theDocument.name)
                 print(message)
 
+            # TO DO: Add a comforting success message...
             return redirect('/')
     else:
         form = DocumentForm()

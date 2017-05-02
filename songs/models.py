@@ -240,6 +240,8 @@ class HaftarahReading(models.Model):
 
 # For uploading documents
 class Document(models.Model):
-    description = models.CharField(max_length=255, blank=True)
+    
+    # Description is a required field
+    description = models.CharField(max_length=255)
     document = models.FileField(upload_to='documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
