@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/$', songs.views.haftarah_reading),
     
     # uploading files
-    url(r'^docs/$', songs.views.document_list),
+    url(r'^docs/$', songs.views.model_form_upload),
 
 ]
 

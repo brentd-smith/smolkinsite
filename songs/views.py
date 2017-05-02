@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from songs.models import ServiceName, Song, \
 BookName, ParshaName, TorahReading, HaftarahReading, Document
 from .forms import DocumentForm
+from django.conf import settings
+
 
 # default, root view
 def index(request):
@@ -122,8 +124,9 @@ import zipTorah
 # from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
+
 # Dealing with uploading files
-#@login_required(login_url='/admin/')
+# @login_required(login_url='/admin/')
 @staff_member_required
 def document_list(request):
     
@@ -162,3 +165,29 @@ def document_list(request):
         'list.html',
         {'documents': documents, 'form': form}
     )
+
+# Upload via the Model Form
+@staff_member_required
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            
+            message = ''
+            try:
+                zip_file_name = newdoc.docfile
+                zipTorah.createImagesFromPdf(zip_file_name, debug=True)
+                s3.upload_zip(zip_file_name, debug=True)
+                zipTorah.loadMetadataToDb(zip_file_name, debug=True)
+                message = 'Successfully processed file = {}'.format(zip_file_name)
+                print(message)
+            except:
+                message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
+                print(message)
+
+            return redirect('/')
+    else:
+        form = DocumentForm()
+    return render(request, 'model_form_upload.html', { 'form' : form })
+    
