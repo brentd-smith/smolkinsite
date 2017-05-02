@@ -57,6 +57,7 @@ def upload_zip(zip_file_name, debug=False):
                 try:
                     s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
                 except Exception as e:
+                    if (debug): print("Exception occurred! {}".format(e))
                     raise e
 
                 if (debug): print("\tCopying of data to S3 completed successfully.")
