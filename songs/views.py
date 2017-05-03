@@ -171,8 +171,8 @@ def document_list(request):
 # Upload via the Model Form
 @staff_member_required
 def model_form_upload(request):
-    import smolkin.settings
-    settings_debug = smolkin.settings.DEBUG
+    import smolkinsite.settings
+    settings_debug = smolkinsite.settings.DEBUG
 
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
