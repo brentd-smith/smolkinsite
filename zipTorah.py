@@ -113,6 +113,7 @@ def loadMetadataToDb(zip_file_name, debug=False):
     
     # Add the meta data to the database
     for k in key_list:
+        print("Processing one line of meta data = {}".format(k))
         text2torah.process_one_line(k, 0, False)
         
         # TODO: Update the torah_readings.txt text file? OR
