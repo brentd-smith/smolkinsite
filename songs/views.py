@@ -171,6 +171,8 @@ def document_list(request):
 # Upload via the Model Form
 @staff_member_required
 def model_form_upload(request):
+    import smolkin.settings
+    settings_debug = smolkin.settings.DEBUG
 
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
@@ -193,9 +195,9 @@ def model_form_upload(request):
                 # import pdb; pdb.set_trace()
                 zip_file_name = os.path.join(settings.MEDIA_ROOT, theDocument.name)
                 print("Zip File Name = {}".format(zip_file_name))
-                zipTorah.createImagesFromPdf(zip_file_name, debug=True)
-                s3.upload_zip(zip_file_name, debug=True)
-                zipTorah.loadMetadataToDb(zip_file_name, debug=True)
+                zipTorah.createImagesFromPdf(zip_file_name, debug=settings_debug)
+                s3.upload_zip(zip_file_name, debug=settings_debug)
+                zipTorah.loadMetadataToDb(zip_file_name, debug=settings_debug)
                 message = 'Successfully processed file = {}'.format(zip_file_name)
                 print(message)
             except:

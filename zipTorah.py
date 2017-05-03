@@ -7,9 +7,6 @@ import shutil
 import argparse
 import text2torah
 
-# zip_file_name = "readingforbenbelinsbarmitzvahservice.zip"
-# debug = True
-
 tri = ''
 aliyah = ''
 parsha = ''
