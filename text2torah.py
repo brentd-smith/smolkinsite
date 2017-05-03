@@ -95,6 +95,8 @@ def process_one_line(line, count, debug=True):
             ext = "pdf"
         elif file_name.lower().endswith(".jpg") :
             ext = "jpg"
+        elif file_name.lower().endswith(".png") :
+            ext = "png"
         if (debug): 
             print('Extension=',ext)
         
@@ -154,8 +156,6 @@ def build_db_from_text(fh, clear=True):
             torah = TorahReading.objects.all()
             torah.delete()
 
-
-
         line_count = 0
         for line in fh:
             process_one_line(line, line_count, debug=False)
@@ -172,6 +172,48 @@ def text2db(file_name='torah_readings.txt', clear=True):
     build_db_from_text(fileinput.input(file_name), clear)
 # end text2db
 
+
+def loadTestData():
+    
+    # clear books
+    book_names = BookName.objects.all()
+    book_names.delete()
+    
+    # clear parshas
+    parshas = ParshaName.objects.all()
+    parshas.delete()
+    
+    # add Book Breshit
+    breshit = BookName(name='Breshit', display='Breshit (Genesis)', seq_number=1)
+    breshit.save()
+    
+    # add Book Shemot
+    shemot = BookName("Shemot", "Shemot (Exodus)", 2)
+    shemot.save()
+
+    breshit = BookName.objects.get(pk='Breshit')
+    shemot = BookName.objects.get(pk='Shemot')
+    
+    # add some Parshas
+    psh = ParshaName(book_name=breshit, name='Breshit', display='Parshat Breshit',seq_number=1, prefix="01")
+    psh.save()
+
+    psh = ParshaName(book_name=breshit, name='Noach', display='Parshat Noach',seq_number=2, prefix="02")
+    psh.save()
+    
+    psh = ParshaName(book_name=shemot, name='Shemot', display='Parshat Shemot',seq_number=13, prefix="01")
+    psh.save()
+
+    psh = ParshaName(book_name=shemot, name='Bo', display='Parshat Bo',seq_number=15,prefix="03")
+    psh.save()
+    
+    # clear Torah Readings
+    torah = TorahReading.objects.all()
+    torah.delete()
+    
+    # add a smaller number of Torah Readings for testing purposes
+    build_db_from_text(fileinput.input('test_torah_readings.txt'), False)
+    
 
 def addBooksAndParshas():
     """

@@ -1,8 +1,12 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-from songs.models import ServiceName, Song, BookName, ParshaName, TorahReading, HaftarahReading
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from songs.models import ServiceName, Song, \
+BookName, ParshaName, TorahReading, HaftarahReading, Document
+from .forms import DocumentForm
+from django.conf import settings
+import os
+import os.path
 
 # default, root view
 def index(request):
@@ -21,10 +25,11 @@ def song_list(request, service_name):
             DUPLICATES.add(s.name)
     return render(request, 'song_list.html', {'songs': LIST, 'service': service})
 
-def is_jpg(x): return x.extension == "jpg"
+def is_jpg(x): return x.extension == "jpg" or x.extension == "png"
 def is_pdf(x): return x.extension == "pdf" 
 def is_mp3(x): return x.extension == "mp3"
 
+# Song/Service details
 def song_detail(request, service_name, song_name):
     details = Song.objects.filter(name=song_name)
     service = ServiceName.objects.get(pk=service_name)
@@ -82,12 +87,12 @@ def torah_reading(request, service_type, book_name, parsha_name, triennial_cycle
     parsha = ParshaName.objects.get(pk=parsha_name)
     song = triennial_cycle + ' Triennial ' + aliyah + ' Aliyah'
     
-    details = TorahReading.objects.filter(parsha=parsha_name, triennial=triennial_cycle, aliyah=aliyah)
+    details = TorahReading.objects.filter(parsha=parsha_name, triennial=triennial_cycle, aliyah=aliyah).order_by('file_name')
 
     lyric_images = list(filter(is_jpg, details))
     audio_files = list(filter(is_mp3, details))
     lyric_doc = list(filter(is_pdf, details))
-    
+
     reading_type = get_reading_type(service_type)
     return render(request, 'reading_detail.html',
         {'lyric_files': lyric_images, 'lyric_pages' : len(lyric_images),
@@ -114,3 +119,94 @@ def haftarah_reading(request, service_type, book_name, parsha_name):
         'audio_files': audio_files, 
         'lyric_doc': lyric_doc, 
         'song': song, 'parsha': parsha, 'book': book, 'reading_type': reading_type, 'service_type': service_type})
+        
+
+import s3
+import zipTorah
+# from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+# Dealing with uploading files
+# @login_required(login_url='/admin/')
+@staff_member_required
+def document_list(request):
+    
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        
+        # process the document...
+        if form.is_valid():
+            newdoc = Document(docfile=request.FILES['docfile'])
+            # newdoc.save()
+            
+            message = ''
+            try:
+                zip_file_name = newdoc.docfile
+                zipTorah.createImagesFromPdf(zip_file_name, debug=True)
+                s3.upload_zip(zip_file_name, debug=True)
+                zipTorah.loadMetadataToDb(zip_file_name, debug=True)
+                message = 'Successfully processed file = {}'.format(zip_file_name)
+                print(message)
+            except:
+                message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
+                print(message)
+
+            # Redirect to the document list after POST
+            # return HttpResponseRedirect(reverse('list'))
+    else:
+        form = DocumentForm()  # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render(
+        request,
+        'list.html',
+        {'documents': documents, 'form': form}
+    )
+
+# Upload via the Model Form
+@staff_member_required
+def model_form_upload(request):
+    import smolkinsite.settings
+    settings_debug = smolkinsite.settings.DEBUG
+
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Save the document on the file system and the meta data in the db
+            form.save()
+            dscr =request.POST['description']
+        
+            print('Description entered by user: {}'.format(dscr))
+            uploaded_doc = Document.objects.all().filter(description = dscr)
+            
+            # TODO: Make description a unique field in the Model
+            # if uploaded_doc (is not None) and len(uploaded_doc) == 1
+            theDocument = uploaded_doc[0].document
+            print("The name of the document just saved is: {}".format(theDocument.name))
+            
+            # process theDocument
+            message = ''
+            try:
+                # import pdb; pdb.set_trace()
+                zip_file_name = os.path.join(settings.MEDIA_ROOT, theDocument.name)
+                print("Zip File Name = {}".format(zip_file_name))
+                zipTorah.createImagesFromPdf(zip_file_name, debug=settings_debug)
+                s3.upload_zip(zip_file_name, debug=settings_debug)
+                zipTorah.loadMetadataToDb(zip_file_name, debug=settings_debug)
+                message = 'Successfully processed file = {}'.format(zip_file_name)
+                print(message)
+            except:
+                message = 'An error occurred during processing file = {}'.format(theDocument.name)
+                print(message)
+
+            # TO DO: Add a comforting success message...
+            return redirect('/')
+    else:
+        form = DocumentForm()
+    return render(request, 'model_form_upload.html', { 'form' : form })
+    

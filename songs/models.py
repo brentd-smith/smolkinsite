@@ -35,7 +35,8 @@ ALIYAHS = (
 MP3 = "mp3"
 PDF = "pdf"
 JPG = "jpg"
-EXTENSIONS = ((MP3, MP3), (PDF, PDF), (JPG, JPG))
+PNG = "png"
+EXTENSIONS = ((MP3, MP3), (PDF, PDF), (JPG, JPG), (PNG, PNG))
 
 
 # Represents one of the services at OZS
@@ -236,3 +237,12 @@ class HaftarahReading(models.Model):
     
     def __str__(self):
         return 'Haftarah for ' + self.parsha.display
+        
+
+# For uploading documents
+class Document(models.Model):
+    
+    # Description is a required field
+    description = models.CharField(max_length=255)
+    document = models.FileField(upload_to='documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

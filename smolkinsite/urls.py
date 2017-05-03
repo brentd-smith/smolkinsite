@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
 import songs.views
 
 urlpatterns = [
@@ -34,4 +37,11 @@ urlpatterns = [
     url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/$', songs.views.parsha_list),
     url(r'(?P<service_type>HaftarahReading)/(?P<book_name>[a-zA-Z]+)/(?P<parsha_name>[\-\'a-zA-Z]+)/$', songs.views.haftarah_reading),
     
+    # uploading files
+    url(r'^docs/$', songs.views.model_form_upload),
+
 ]
+
+# if settings.DEBUG:
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

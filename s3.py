@@ -12,7 +12,7 @@ NAME_OF_BUCKET = None
 try:
     NAME_OF_BUCKET = os.environ['BUCKET_NAME']
 except KeyError:
-    name_of_bucket = "testing-file-uploads"
+    NAME_OF_BUCKET = "testing-file-uploads"
     
 ## Connect to a bucket
 s3 = boto3.resource('s3')
@@ -25,10 +25,15 @@ Given a ZIP Archive file
 """
 
 def upload_zip(zip_file_name, debug=False):
-    
+
+    if (debug): print("Bucket Name = {}".format(NAME_OF_BUCKET))
+
     # Get the PDF filename
     pdf_filename = ''
-    if (debug): print("ZIP Archive: {}".format(zip_file_name))
+    if (debug): 
+        print("Method: s3.upload_zip()")
+        print("ZIP Archive: {}".format(zip_file_name))
+        
     with zipfile.ZipFile(zip_file_name) as zf:
         for info in zf.infolist():
             filename, extension = os.path.splitext(info.filename)
@@ -37,19 +42,34 @@ def upload_zip(zip_file_name, debug=False):
     
     # Extract the KEY information
     the_key = get_object_key(pdf_filename, debug)
+    if (debug): print("Retrieved object key = {}".format(the_key))
     
     # Copy all files to the S3 bucket
     with zipfile.ZipFile(zip_file_name) as zf:
+        if (debug): print("\tBeginning copy of all files to the S3 bucket...")
         for info in zf.infolist():
+            if (debug): print("\tInside for loop, info.filename = {}".format(info.filename))
             with zf.open(info.filename) as myfile:
-                # TODO: object_key will be more involved, will include Service / Book / Parsha 
+                if (debug): print("\tOpening file, ready to copy...")
                 # 07 - Torah Readings/03 - Vayikra (Leviticus)/09.5 Parshat Behar - Bechukotai
                 final_key = os.path.normpath(os.path.join(the_key, info.filename))
-                if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, name_of_bucket))
-                s3.Bucket(name_of_bucket).put_object(Key=final_key, Body=myfile.read())
+                if (debug): print("\tStoring {} into S3 Bucket {}".format(final_key, NAME_OF_BUCKET))
+                try:
+                    s3.Bucket(NAME_OF_BUCKET).put_object(Key=final_key, Body=myfile.read(), ACL='public-read')
+                except Exception:
+                    import sys, traceback
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    # print the traceback
+                    traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+                    # print the exception
+                    traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
+                else:
+                    if (debug): print("\tCopying of data to S3 completed successfully.")
             
 # works even when the "folders" my, key, and name have not been created yet
-# s3.Object(name_of_bucket, "my/key/name/services.txt").upload_file("services.txt")
+# s3.Object(NAME_OF_BUCKET, "my/key/name/services.txt").upload_file("services.txt")
+
+# TODO: Security, ACL, need to set all uploads to public read...
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
