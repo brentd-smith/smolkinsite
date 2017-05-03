@@ -6,15 +6,17 @@ import glob
 import shutil
 import argparse
 import text2torah
+import sys, traceback
 
 serviceType = 'TorahReading'
-to_append = []
 
 def createImagesFromPdf(zip_file_name, debug=False):
     """
     Extract data from a zip file, split the PDF into multiple PNG image files 
     and crop whitespace.
     """
+    to_append = []
+    
     # extract
     if (debug): 
         print("Method: zipTorah.createImagesFromPdf()")
@@ -45,6 +47,15 @@ def createImagesFromPdf(zip_file_name, debug=False):
                     os.remove(info.filename)
                 except KeyError:
                     print('ERROR: Did not find {} in zip file'.format(info.filename))
+                except:
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    # print the traceback
+                    traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+                    # print the exception
+                    traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
+                else:
+                    print("Successfully extracted and cropped image files...")
+                    
     
     # add the new image files created from the PDF
     with zipfile.ZipFile(zip_file_name, mode='a') as zf:
@@ -59,7 +70,6 @@ def createImagesFromPdf(zip_file_name, debug=False):
                 if (debug): print("Removing file: {}".format(f))
                 os.remove(f)
         except Exception:
-            import sys, traceback
             exc_type, exc_value, exc_traceback = sys.exc_info()
             # print the traceback
             traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
@@ -68,10 +78,6 @@ def createImagesFromPdf(zip_file_name, debug=False):
         else:
             print("Successfully added new image file names...")
     
-    # Clear the list
-    to_append = []
-
-
     # show the contents of the final ZIP Archive after processing
     if (debug):
         print("Final results of processing....")
