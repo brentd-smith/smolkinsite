@@ -7,9 +7,6 @@ import shutil
 import argparse
 import text2torah
 
-tri = ''
-aliyah = ''
-parsha = ''
 serviceType = 'TorahReading'
 to_append = []
 
@@ -52,6 +49,10 @@ def createImagesFromPdf(zip_file_name, debug=False):
     # add the new image files created from the PDF
     with zipfile.ZipFile(zip_file_name, mode='a') as zf:
         try:
+            
+            ## TODO: clear out the list to_append
+            ## OR put all this into a class....
+            
             for f in to_append:
                 if (debug): print("Added file {} to the archive.".format(f))
                 zf.write(f)
@@ -66,8 +67,11 @@ def createImagesFromPdf(zip_file_name, debug=False):
             traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
         else:
             print("Successfully added new image file names...")
-            
     
+    # Clear the list
+    to_append = []
+
+
     # show the contents of the final ZIP Archive after processing
     if (debug):
         print("Final results of processing....")
