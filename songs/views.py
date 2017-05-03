@@ -87,11 +87,12 @@ def torah_reading(request, service_type, book_name, parsha_name, triennial_cycle
     parsha = ParshaName.objects.get(pk=parsha_name)
     song = triennial_cycle + ' Triennial ' + aliyah + ' Aliyah'
     
-    details = TorahReading.objects.filter(parsha=parsha_name, triennial=triennial_cycle, aliyah=aliyah)
+    details = TorahReading.objects.filter(parsha=parsha_name, triennial=triennial_cycle, aliyah=aliyah).order_by('file_name')
 
     lyric_images = list(filter(is_jpg, details))
     audio_files = list(filter(is_mp3, details))
     lyric_doc = list(filter(is_pdf, details))
+    import pdb; pdb.set_trace()
     
     reading_type = get_reading_type(service_type)
     return render(request, 'reading_detail.html',
