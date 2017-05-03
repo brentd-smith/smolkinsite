@@ -128,6 +128,7 @@ def loadMetadataToDb(zip_file_name, debug=False):
         
         # TODO: Update the torah_readings.txt text file? OR
         # create an easy way to generate a new up to date list
+        # just append it to the torah_readings.txt file..what about prod?
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
