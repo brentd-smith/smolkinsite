@@ -11,6 +11,53 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import dj_database_url
+import logging
+
+
+# Need to have a separate logger configured for the settings file, cannot use the config below for itself
+logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s", datefmt="%d/%b/%Y %H:%M:%S")
+settingsLogger = logging.getLogger(__name__)
+
+# Default application logging verbosity to most abusive setting.
+VERBOSITY = os.environ.get('VERBOSITY', 'DEBUG')
+settingsLogger.info("The variable VERBOSITY is set to {}".format(VERBOSITY))
+# Default django logging verbosity to slightly less abusive.
+DJANGO_VERBOSITY = os.environ.get('DJANGO_VERBOSITY', 'INFO')
+settingsLogger.info("The variable DJANGO_VERBOSITY is set to {}".format(DJANGO_VERBOSITY))
+
+# Define a basic log configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        # Django Server Logging - handle django.server log requests.
+        'django': {
+            'handlers': ['console'],
+            'level': DJANGO_VERBOSITY,
+            'propagate': False,
+        },
+        # Application Logging - handling logging requests froms songs.views.*, etc.
+        'songs': {
+            'handlers': ['console'],
+            'level': VERBOSITY,
+            'propagate': False,
+        },
+    },
+}
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +74,7 @@ ALLOWED_HOSTS = []
 DEBUG = False
 
 PLATFORM = os.environ.get('C9_HOSTNAME', "remote")
+settingsLogger.info("The value of the variable PLATFORM is {}".format(PLATFORM))
 if PLATFORM != "remote":
     # local, running on local dev machine
     DEBUG = True
@@ -35,14 +83,15 @@ else:
     # DEBUG should only be True if specifically set to True
     dbgString = os.environ.get('DEBUG', 'False')
     DEBUG = (dbgString == 'True')
-    print("DEBUG is {}".format(DEBUG))
     
+    # TODO: Not sure what this should be in prod
     try:
         ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(",")
     except KeyError:
         ALLOWED_HOSTS =  "localhost, 127.0.0.1, [::1]".split(",")
-    print("ALLOWED_HOSTS IS {}".format(ALLOWED_HOSTS))
-# end if
+
+settingsLogger.info("The value of the variable DEBUG is {}".format(DEBUG))
+settingsLogger.info(" The value of the variable ALLOWED_HOSTS IS {}".format(ALLOWED_HOSTS))
 
 # Set this to True to avoid transmitting the CSRF cookie over HTTP accidentally.
 CSRF_COOKIE_SECURE = not DEBUG
