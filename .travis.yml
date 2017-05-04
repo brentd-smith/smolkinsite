@@ -13,10 +13,10 @@ deploy:
     secure: yoEKEEiPxk3hRCzdFOK9eifaOn8GjIk5ZVREDSIRZ2DAbfDL2l7nXTUpKlHXXGJ95HVl2HfME6ffnkBMz/yjVSd9J9I2ar6XCbbVUCL/1CWPeSosXEyzMs/fjLyRXSlJEk5A9JI9iJoPWtqtjO3urBsLubAUcDwjF3wbjjyUeRJXZ3FjZ1eI+rHXihgv8j8OB9EZE8wu0KuLR8ZTMJ6GlJULhhz6szMcSOr1PESFYeL/y8zon88mc+9UoxJD3RZ7V1ZwS7tCmZsKmHU85t8u7Z8iwCf/L4ogVB0QDyITFwdNa1jpRjAUjT1Uat2H7Y9re7LAT6ar+TdA1KFra+/FUsMke8PMapWUfzJ9iVGs4e5L4fcEioXzsTsIljVOE69A3thsHlNkIsW7pcDZzTK8zl32RnzH4aZtAUBJO0ZpmYBzGzK3nFCNiPXSyQjImsHuoJXgO88KdIZpwImjMEUPyhvPiSKmwJZVJ3at2ol4ArJmuEb9LKeIOn7xsq28ihJKz6bf9cdon8HI3OP/brIqTQuMYQc55XTLhclRWRO6zTgv/LrGb/eig7Q4+EzY1YvpuyQ3wzslFl0LNCuktyJVGYCHwPYUBoDQUaKyPR0J4Nijbv0Xs7ZHw/Od/r4eDHTnwDGGmpsDOD99M5h2sxTKpBFHivaCdIcQeOcvzExlejs=
   app:
     master: smolkin-site-staging
-      run:
-      - python manage.py makemigrations
-      - python manage.py migrate
-      - python manage.py dataload --services
-      - python manage.py dataload --torah
-      - python manage.py dataload --haftarah
     production: smolkin-site-production
+  run:
+  - python manage.py makemigrations
+  - python manage.py migrate
+  - python manage.py dataload --services
+  - python manage.py dataload --torah
+  - python manage.py dataload --haftarah
