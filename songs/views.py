@@ -7,6 +7,9 @@ from .forms import DocumentForm
 from django.conf import settings
 import os
 import os.path
+import logging
+
+viewLogger = logging.getLogger(__name__)
 
 # default, root view
 def index(request):
@@ -126,53 +129,14 @@ import zipTorah
 # from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
-
-# Dealing with uploading files
-# @login_required(login_url='/admin/')
-@staff_member_required
-def document_list(request):
-    
-    # Handle file upload
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        
-        # process the document...
-        if form.is_valid():
-            newdoc = Document(docfile=request.FILES['docfile'])
-            # newdoc.save()
-            
-            message = ''
-            try:
-                zip_file_name = newdoc.docfile
-                zipTorah.createImagesFromPdf(zip_file_name, debug=True)
-                s3.upload_zip(zip_file_name, debug=True)
-                zipTorah.loadMetadataToDb(zip_file_name, debug=True)
-                message = 'Successfully processed file = {}'.format(zip_file_name)
-                print(message)
-            except:
-                message = 'An error occurred during processing file = {}'.format(newdoc.docfile)
-                print(message)
-
-            # Redirect to the document list after POST
-            # return HttpResponseRedirect(reverse('list'))
-    else:
-        form = DocumentForm()  # A empty, unbound form
-
-    # Load documents for the list page
-    documents = Document.objects.all()
-
-    # Render list page with the documents and the form
-    return render(
-        request,
-        'list.html',
-        {'documents': documents, 'form': form}
-    )
-
 # Upload via the Model Form
 @staff_member_required
 def model_form_upload(request):
+    viewLogger.debug("Inside view model_form_upload.")
+    
     import smolkinsite.settings
     settings_debug = smolkinsite.settings.DEBUG
+    viewLogger.debug("Value of variable settings_debug is {}".format(settings_debug))
 
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
@@ -181,28 +145,28 @@ def model_form_upload(request):
             form.save()
             dscr =request.POST['description']
         
-            print('Description entered by user: {}'.format(dscr))
+            viewLogger.debug('Description entered by user: {}'.format(dscr))
             uploaded_doc = Document.objects.all().filter(description = dscr)
             
             # TODO: Make description a unique field in the Model
             # if uploaded_doc (is not None) and len(uploaded_doc) == 1
             theDocument = uploaded_doc[0].document
-            print("The name of the document just saved is: {}".format(theDocument.name))
+            viewLogger.debug("The name of the document just saved is: {}".format(theDocument.name))
             
             # process theDocument
             message = ''
             try:
                 # import pdb; pdb.set_trace()
                 zip_file_name = os.path.join(settings.MEDIA_ROOT, theDocument.name)
-                print("Zip File Name = {}".format(zip_file_name))
+                viewLogger.debug("Zip File Name = {}".format(zip_file_name))
                 zipTorah.createImagesFromPdf(zip_file_name, debug=settings_debug)
                 s3.upload_zip(zip_file_name, debug=settings_debug)
                 zipTorah.loadMetadataToDb(zip_file_name, debug=settings_debug)
                 message = 'Successfully processed file = {}'.format(zip_file_name)
-                print(message)
+                viewLogger.debug(message)
             except:
                 message = 'An error occurred during processing file = {}'.format(theDocument.name)
-                print(message)
+                viewLogger.error(message)
 
             # TO DO: Add a comforting success message...
             return redirect('/')
