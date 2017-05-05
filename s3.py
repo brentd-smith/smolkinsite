@@ -27,8 +27,9 @@ class SongsRepository:
         self.repositoryLogger = logging.getLogger('SongsRepository')
         self.repositoryLogger.setLevel(logging.INFO)
         formatter = logging.Formatter('%(message)s')
+        _maxBytes = 512 * 1024
         self.handler = logging.handlers.RotatingFileHandler(
-            self.LOG_FILENAME, maxBytes=4*1024, backupCount=5, )
+            self.LOG_FILENAME, maxBytes=_maxBytes, backupCount=5, )
         self.handler.setFormatter(formatter)
         self.repositoryLogger.addHandler(self.handler)
 
@@ -44,6 +45,7 @@ class SongsRepository:
             for obj in self.s3.Bucket(self.NAME_OF_BUCKET).objects.all():
                 if obj.key.startswith('07 - Torah Readings/'):
                     self.repositoryLogger.info("{}".format(obj.key))
+            
         elif service_type == 'HaftarahReading':
             # download the current list of haftarah readings
             pass
