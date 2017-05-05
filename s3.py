@@ -5,7 +5,7 @@ import pdf2image
 import glob
 import shutil
 import boto3 # S3
-from text2torah import get_object_key
+from text2torah import Text2Torah
 import argparse
 import logging
 import logging.handlers
@@ -78,7 +78,8 @@ class SongsRepository:
                     pdf_filename = info.filename    
         
         # Extract the KEY information
-        the_key = get_object_key(pdf_filename, debug)
+        torah = Text2Torah()
+        the_key = torah.get_object_key(pdf_filename, debug)
         if (debug): print("Retrieved object key = {}".format(the_key))
         
         # Copy all files to the S3 bucket
