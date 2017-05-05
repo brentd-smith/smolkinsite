@@ -15,7 +15,7 @@ class SongsRepository:
 
     # Filename where downloaded list will be stored, versions
     # handled by the RotatingFileHandler via the logging system.
-    LOG_FILENAME = 'z_torah_readings.txt'
+    LOG_FILENAME = 'torah_readings.txt'
   
     def __init__(self):
         try:
