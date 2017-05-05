@@ -1,11 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from songs.models import ServiceName
 
-# import text2torah
-# import text2haftarah
-# import text2service
-
-import s3
+from s3 import SongsRepository
 import zipTorah
 
 
@@ -51,7 +47,8 @@ class Command(BaseCommand):
                 # TODO: Put these into a transaction, try-except-clause, need some way to 
                 # undo in case of errors
                 zipTorah.createImagesFromPdf(zip_file_name)
-                s3.upload_zip(zip_file_name)
+                sr = SongsRepository()
+                sr.upload_zip(zip_file_name)
                 zipTorah.loadMetadataToDb(zip_file_name)
             elif options['haftarah']:
                 self.stdout.write("Not Implemented Yet!") # Importing the haftarah readings...")
