@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 
 import text2service
-import text2torah
+from text2torah import Text2Torah
 
 from django.core.management import call_command
 from django.utils.six import StringIO
@@ -83,12 +83,13 @@ class Text2TorahTests(TestCase):
     # TODO: Create a loadTestData procedure that loads a limited set of data for testing purposes
     # that will help keep the tests fast...
     def setUp(self):
-        text2torah.loadTestData()
+        self.tt = Text2Torah()
+        self.tt.loadTestData()
 
     def test_get_object_key(self):
         # filename: 3rd Triennial Noach 6th Aliyah.pdf
         # returns:  07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah/
-        result = text2torah.get_object_key("3rd Triennial Noach 6th Aliyah.pdf", debug=False)
+        result = self.tt.get_object_key("3rd Triennial Noach 6th Aliyah.pdf", debug=False)
         self.assertEqual(result, "07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah")
 
     def test_book_list(self):
