@@ -3,7 +3,7 @@ import fileinput
 import re
 import sys
 import os.path
-from songs.models import BookName, ParshaName, TorahReading
+from songs.models import BookName, ParshaName, TorahReading, AlternateParshaName
 from songs.models import ServiceName
 
 import sys, traceback
@@ -391,6 +391,12 @@ class Text2Torah:
         
         psh = ParshaName(book_name=devarim, name="V'ZotHaBerachah",display="Parshat V'Zot HaBerachah",seq_number=53, prefix="11")
         psh.save()
+        
+        
+        # psh = ParshaName(book_name=vayikra, name='Tzav', display='Parshat Tzav',seq_number=25, prefix="02")
+        alt = AlternativeParshaName(parsha_name='Tzav', alternate_name="T'tzaveh")
+        alt.save()
+        
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
