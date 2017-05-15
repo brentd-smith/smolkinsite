@@ -54,7 +54,6 @@ class Text2Torah:
             
         return the_s3_object_key
     
-    
     # 07 - Torah Readings/01 - Breshit (Genesis)/02 Parshat Noach/3rd Triennial Noach 6th Aliyah/3rd Triennial Noach 6th Aliyah.pdf
     def process_one_line(self, line, count, debug=True):
     
@@ -145,12 +144,9 @@ class Text2Torah:
             text2torahLogger.debug("Something bad happened:", sys.exc_info()[0])
             fh.close()
             raise
-    # end build_db_from_text
-    
+
     def text2db(self, file_name='torah_readings.txt', clear=True):
         self.build_db_from_text(fileinput.input(file_name), clear)
-    # end text2db
-    
     
     def loadTestData(self):
         
@@ -192,8 +188,7 @@ class Text2Torah:
         
         # add a smaller number of Torah Readings for testing purposes
         self.build_db_from_text(fileinput.input('test_torah_readings.txt'), False)
-        
-    
+
     def addBooksAndParshas(self):
         """
         Clear the database by deleting all currently added Books and Parshas. Then
@@ -396,8 +391,6 @@ class Text2Torah:
         
         psh = ParshaName(book_name=devarim, name="V'ZotHaBerachah",display="Parshat V'Zot HaBerachah",seq_number=53, prefix="11")
         psh.save()
-                
-
 
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
@@ -429,5 +422,3 @@ if __name__ == '__main__':
     # We pass '-' as only file when there are no files which will cause fileinput to read from stdin
     torah = Text2Torah()
     torah.build_db_from_text(fileinput.input(files=args.files if len(args.files) > 0 else ('-', )), args.clear)
-    
-
