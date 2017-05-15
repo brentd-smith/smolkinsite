@@ -180,7 +180,7 @@ class ParshaName(models.Model):
         return "%s %s" % (self.prefix, self.display)
 
 
-class AlternativeParshaName(models.Model):
+class AlternateParshaName(models.Model):
     
     # FK to the ParshaName
     parsha_name = models.ForeignKey(ParshaName)

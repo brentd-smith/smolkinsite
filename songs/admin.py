@@ -46,3 +46,17 @@ class HaftarahReadingAdmin(admin.ModelAdmin):
     search_fields = ('file_name',)
 
 admin.site.register(HaftarahReading, HaftarahReadingAdmin)
+
+
+# class AlternateBookNameAdmin(admin.ModelAdmin):
+#     list_display = ('book_name', 'alternate_name')
+#     ordering = ('book_name', )
+    
+# admin.site.register(AlternateBookName, AlternateBookNameAdmin)
+
+# class AlternateParshaNameAdmin(admin.ModelAdmin):
+#     list_display = ('parsha_name', 'alternate_name')
+#     ordering = ('parsha_name', )
+    
+# admin.site.register(AlternateParshaName, AlternateParshaNameAdmin)
+
