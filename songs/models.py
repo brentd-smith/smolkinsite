@@ -110,6 +110,18 @@ class BookName(models.Model):
     def object_key(self):
         return "%02d - %s" % (self.seq_number, self.display)
 
+class AlternateBookName(models.Model):
+    
+    # FK to the BookName
+    book_name = models.ForeignKey(BookName)
+
+    # Comma separated list of potential alternate parsha names
+    # Example 'Vayirka, Vayeekra' or whatever
+    # During an input/load of new data, if parsha name not found, look for it here....
+    alternate_name = models.CharField(max_length=256,null=True)
+   
+
+
 # Represents a Parsha from one of the books of the Torah
 class ParshaName(models.Model):
 
@@ -127,7 +139,7 @@ class ParshaName(models.Model):
 
     # Sequence Number that is prepended to the display name as part of the object key
     prefix = models.CharField(max_length=4,null=False)
-
+    
     # check to see if there is a haftarah reading present for this parsha
     def has_haftarah(self):
         readings = HaftarahReading.objects.filter(parsha=self.name)
@@ -167,6 +179,17 @@ class ParshaName(models.Model):
     def object_key(self):
         return "%s %s" % (self.prefix, self.display)
 
+
+class AlternativeParshaName(models.Model):
+    
+    # FK to the ParshaName
+    parsha_name = models.ForeignKey(ParshaName)
+
+    # Comma separated list of potential alternate parsha names
+    # Example 'Vayirka, Vayeekra' or whatever
+    # During an input/load of new data, if parsha name not found, look for it here....
+    alternate_name = models.CharField(max_length=256,null=True)
+   
 
 # Represents a Reading - Either a Torah Reading or a Haftarah Reading
 class TorahReading(models.Model):
