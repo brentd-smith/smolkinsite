@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ServiceName, Song, BookName, ParshaName, TorahReading, HaftarahReading
+from .models import ServiceName, Song, BookName, ParshaName, TorahReading, HaftarahReading, AlternateBookName, AlternateParshaName
 
 # class AuthorAdmin(admin.ModelAdmin):
 #     list_display = ('first_name', 'last_name', 'email')
@@ -48,15 +48,15 @@ class HaftarahReadingAdmin(admin.ModelAdmin):
 admin.site.register(HaftarahReading, HaftarahReadingAdmin)
 
 
-# class AlternateBookNameAdmin(admin.ModelAdmin):
-#     list_display = ('book_name', 'alternate_name')
-#     ordering = ('book_name', )
+class AlternateBookNameAdmin(admin.ModelAdmin):
+    list_display = ('book_name', 'alternate_name')
+    ordering = ('book_name', )
     
-# admin.site.register(AlternateBookName, AlternateBookNameAdmin)
+admin.site.register(AlternateBookName, AlternateBookNameAdmin)
 
-# class AlternateParshaNameAdmin(admin.ModelAdmin):
-#     list_display = ('parsha_name', 'alternate_name')
-#     ordering = ('parsha_name', )
+class AlternateParshaNameAdmin(admin.ModelAdmin):
+    list_display = ('parsha_name', 'alternate_name')
+    ordering = ('parsha_name', )
     
-# admin.site.register(AlternateParshaName, AlternateParshaNameAdmin)
+admin.site.register(AlternateParshaName, AlternateParshaNameAdmin)
 
