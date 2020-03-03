@@ -1,9 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
 from songs.models import ServiceName
 
-import text2torah
+from text2torah import Text2Torah
 import text2haftarah
 import text2service
+
 
 class Command(BaseCommand):
     help = 'Load data after a migration.'
@@ -40,7 +41,8 @@ class Command(BaseCommand):
             
         if options['torah']:
             self.stdout.write("loading the torah readings...")
-            text2torah.text2db()
+            torah = Text2Torah()
+            torah.text2db()
         elif options['haftarah']:
             self.stdout.write("loading the haftarah readings...")
             text2haftarah.text2db()

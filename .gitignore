@@ -8,3 +8,5 @@ documents
 *.pdf
 *.png
 *.jpg
+z_*
+*.txt.?

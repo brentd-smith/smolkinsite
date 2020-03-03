@@ -30,7 +30,7 @@
 	<div class="col-sm-6">
 		<h3><a href="{% URL_PREFIX %}{{lyric_doc.0.s3_obj_key}}" download>Download the Lyrics PDF Document</a></h3>
 		<div class="tabbable">
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-pills">
 				<li class="active"><a href="#tab1" data-toggle="tab">Page 1</a></li>
 				{% if lyric_pages > 1 %}
 				<li><a href="#tab2" data-toggle="tab">Page 2</a></li>
@@ -41,18 +41,18 @@
 			</ul>
  			<div class="tab-content">
 					<div class="tab-pane active" id="tab1">
-						<div class="panel">
-							<img src="{% URL_PREFIX %}{{lyric_files.0.s3_obj_key}}" alt="page1" class="img-responsive" style="padding: 5px 5px 5px 5px;">
+						<div class="panel" style="border: none;">
+							<img src="{% URL_PREFIX %}{{lyric_files.0.s3_obj_key}}" alt="page1" class="img-responsive lyric-img-style">
 						</div>
 					</div>
 				<div class="tab-pane" id="tab2">
-					<div class="panel">
-						<img src="{% URL_PREFIX %}{{lyric_files.1.s3_obj_key}}" alt="page2" class="img-responsive" style="padding: 5px 5px 5px 5px;">
+					<div class="panel"  style="border: none;">
+						<img src="{% URL_PREFIX %}{{lyric_files.1.s3_obj_key}}" alt="page2" class="img-responsive  lyric-img-style">
 					</div>
 				</div>
 				<div class="tab-pane" id="tab3">
-					<div class="panel">
-						<img src="{% URL_PREFIX %}{{lyric_files.2.s3_obj_key}}" alt="page3" class="img-responsive" style="padding: 5px 5px 5px 5px;">
+					<div class="panel" style="border: none;">
+						<img src="{% URL_PREFIX %}{{lyric_files.2.s3_obj_key}}" alt="page3" class="img-responsive  lyric-img-style">
 					</div>
 				</div>
 			</div>
